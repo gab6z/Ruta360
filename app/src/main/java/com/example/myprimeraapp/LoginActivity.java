@@ -58,22 +58,29 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void iniciarSesion(View v) {
-        String user = usuario.getText().toString().trim();
-        String pass = clave.getText().toString().trim();
+        String correoUser = usuario.getText().toString().trim(); // Ahora pedimos el correo
+        String passUser = clave.getText().toString().trim();
 
-        if (user.equals("admin") && pass.equals("1234")) {
+        if (correoUser.isEmpty() || passUser.isEmpty()) {
+            Toast.makeText(this, "Llene todos los campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        BaseDatosSQLite db = new BaseDatosSQLite(this);
+
+        if (db.validarLogin(correoUser, passUser)) {
+
             if (recordar.isChecked()) {
-                guardarInfoAcceso(user, pass);
+                guardarInfoAcceso(correoUser, passUser);
             }
 
-            Toast.makeText(LoginActivity.this, "Acceso Concedido", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "¡Bienvenido a Ruta 360!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("user", user);
-            intent.putExtra("clave", pass);
+            intent.putExtra("user", correoUser);
             startActivity(intent);
             finish();
         } else {
-            Toast.makeText(LoginActivity.this, "Datos incorrectos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show();
         }
     }
 

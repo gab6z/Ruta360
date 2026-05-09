@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Inicio -->
+    <item
+        android:id="@+id/nav_inicio"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="Inicio" />
+
+    <!-- Explorar  -->
+    <item
+        android:id="@+id/nav_explorar"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:title="Explorar" />
+
+    <!-- Crear -->
+    <item
+        android:id="@+id/nav_crear"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="Crear" />
+
+    <!-- Carrito -->
+    <item
+        android:id="@+id/nav_carrito"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Carrito" />
+
+    <!--Social  -->
+    <item
+        android:id="@+id/nav_social"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Social" />
+
+</menu>

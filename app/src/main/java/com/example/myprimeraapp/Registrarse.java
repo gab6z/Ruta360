@@ -2,7 +2,9 @@ package com.example.myprimeraapp;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,7 +35,7 @@ import java.util.Calendar;
 
 public class Registrarse extends AppCompatActivity {
 
-    private TextInputEditText txtCedula, txtNombre, txtApellidos, txtEdad, txtNacimiento;
+    private TextInputEditText txtCedula, txtNombre, txtApellidos, txtEdad, txtNacimiento, txtCorreo, txtClave;
     private Spinner spnNacionalidad, spnGenero;
     private RadioGroup rgEstadoCivil;
     private RadioButton rbSoltero, rbCasado, rbOtro;
@@ -55,6 +57,9 @@ public class Registrarse extends AppCompatActivity {
         txtApellidos = findViewById(R.id.reg_txtapellidos);
         txtEdad = findViewById(R.id.reg_txtedad);
         txtNacimiento = findViewById(R.id.reg_txtnacimiento);
+        txtCorreo = findViewById(R.id.reg_txtcorreo);
+        txtClave = findViewById(R.id.reg_txtclave);
+
 
         spnNacionalidad = findViewById(R.id.reg_spn_nacionalidad);
         spnGenero = findViewById(R.id.reg_spn_genero);
@@ -107,10 +112,11 @@ public class Registrarse extends AppCompatActivity {
         String apellidos = txtApellidos.getText().toString();
         String edad = txtEdad.getText().toString();
         String fechaNac = txtNacimiento.getText().toString();
+        String correo = txtCorreo.getText().toString().trim();
+        String clave = txtClave.getText().toString().trim();
 
         String nacionalidad = spnNacionalidad.getSelectedItem().toString();
         String genero = spnGenero.getSelectedItem().toString();
-
         float nivelIngles = rtgIngles.getRating();
 
         String estadoCivil = "No especificado";
@@ -119,21 +125,20 @@ public class Registrarse extends AppCompatActivity {
         else if (idSeleccionado == R.id.rb_casado) estadoCivil = "Casado/a";
         else if (idSeleccionado == R.id.rb_otro) estadoCivil = "Otro";
 
-        String data =
-                cedula + ";" +
-                nombres + ";" +
-                apellidos + ";" +
-                edad + ";" +
-                nacionalidad + ";" +
-                genero + ";" +
-                estadoCivil + ";" +
-                fechaNac + ";" +
-                nivelIngles + "\n";
+        if(correo.isEmpty() || clave.isEmpty()){
+            Toast.makeText(this, "Debe ingresar correo y contraseña", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String data = cedula + ";" + nombres + ";" + apellidos + ";" + edad + ";" +
+                nacionalidad + ";" + genero + ";" + estadoCivil + ";" + fechaNac + ";" +
+                nivelIngles + ";" + correo + ";" + clave + "\n";
 
         Log.d("REGISTRO_APP", data);
         guardarSD(data);
 
-        Toast.makeText(this, "Los datos han sido ingresados", Toast.LENGTH_LONG).show();
+        guardarBD(cedula, nombres, apellidos, edad, fechaNac, nacionalidad, genero, estadoCivil, nivelIngles, correo, clave);
+        finish();
     }
 
     public String leerSD() {
@@ -166,6 +171,32 @@ public class Registrarse extends AppCompatActivity {
         }
 
         return datos.toString();
+    }
+    public void guardarBD(String cedula, String nombres, String apellidos, String edad,
+                          String fechaNac, String nacionalidad, String genero, String estadoCivil,
+                          float nivelIngles, String correo, String contraseña){
+        BaseDatosSQLite db = new BaseDatosSQLite(this);
+        final SQLiteDatabase db360Write = db.getWritableDatabase();
+
+        if(db360Write != null){
+            ContentValues values = new ContentValues();
+            values.put("cedula", cedula);
+            values.put("nombres", nombres);
+            values.put("apellidos", apellidos);
+            values.put("edad", edad);
+            values.put("nacionalidad", nacionalidad);
+            values.put("genero", genero);
+            values.put("estadoCivil", estadoCivil);
+            values.put("correo", correo);
+            values.put("contraseña", contraseña);
+            values.put("fechaNac", fechaNac);
+            values.put("nivelIngles", nivelIngles);
+
+            db360Write.insert("usuario", null, values);
+            Toast.makeText(this, "Los datos han sido ingresados correctamente en la base de datos", Toast.LENGTH_LONG).show();
+            db360Write.close();
+        }
+
     }
     public void mostrarDatos(View v) {
         String datos = leerSD();
