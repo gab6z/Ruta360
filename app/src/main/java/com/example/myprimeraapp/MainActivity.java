@@ -81,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
                     mostrarAyuda();
                     return true;
                 }
+                if (item.getItemId() == R.id.mp_cerrar_sesion) {
+                    borrarPreferenciasYSalir();
+                    return true;
+                }
                 return false;
             });
             popupMenu.show();
@@ -173,8 +177,6 @@ public class MainActivity extends AppCompatActivity {
         });
         dialog.show();
     }
-
-
 
     private void borrarPreferenciasYSalir() {
         SharedPreferences preferences = getSharedPreferences("Credenciales", MODE_PRIVATE);
