@@ -2,13 +2,19 @@ package com.example.myprimeraapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +29,10 @@ import androidx.appcompat.app.AlertDialog;
 
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.zxing.BarcodeFormat;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
 
         btnTopPerfil.setOnClickListener(v -> {
-
             PopupMenu popupMenu = new PopupMenu(MainActivity.this, btnTopPerfil);
             popupMenu.getMenuInflater().inflate(R.menu.menuprincipal, popupMenu.getMenu());
 
@@ -75,6 +84,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (id == R.id.mp_acercade) {
                     mostrarAcercaDe();
+                    return true;
+                }
+                if (id == R.id.mp_historial) {
+                    mostrarHistorialDialogo();
                     return true;
                 }
                 if (id == R.id.mp_ayuda) {
@@ -109,8 +122,8 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (id == R.id.nav_carrito) {
                     // Módulo de Chavez
-                    Toast.makeText(this, "Ir a Carrito/Reservas - Módulo de Chavez", Toast.LENGTH_SHORT).show();
-
+                    Intent intent = new Intent(MainActivity.this, resumen_reserva.class);
+                    startActivity(intent);
                 } else if (id == R.id.nav_social) {
                     // Módulo de Noboa
                     Toast.makeText(this, "Ir a Comunidad Social - Módulo de Noboa", Toast.LENGTH_SHORT).show();
@@ -142,6 +155,9 @@ public class MainActivity extends AppCompatActivity {
         }
         if (item.getItemId() == R.id.mp_ayuda) {
             mostrarAyuda();
+            return true;
+        }if(item.getItemId() == R.id.mp_historial){
+            mostrarHistorialDialogo();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -175,6 +191,63 @@ public class MainActivity extends AppCompatActivity {
         btnCerrarAyuda.setOnClickListener(v -> {
             dialog.dismiss();
         });
+        dialog.show();
+    }
+
+    private void mostrarHistorialDialogo() {
+        Toast.makeText(this, "Intentando abrir historial...", Toast.LENGTH_SHORT).show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Mis Reservas Recientes");
+
+        ListView lv = new ListView(this);
+        ArrayList<String> lista = new ArrayList<>();
+        ArrayList<Integer> ids = new ArrayList<>();
+
+        BaseDatosSQLite helper = new BaseDatosSQLite(this);
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Cursor c = db.rawQuery("SELECT * FROM reservas", null);
+
+        if (c.getCount() == 0) {
+            Toast.makeText(this, "No tienes reservas registradas aún", Toast.LENGTH_LONG).show();
+            c.close();
+            return;
+        }
+
+        while (c.moveToNext()) {
+            ids.add(c.getInt(0));
+            lista.add("Ticket #" + c.getInt(0) + "\nDestino: " + c.getString(2));
+        }
+        c.close();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lista);
+        lv.setAdapter(adapter);
+
+        lv.setOnItemClickListener((p, v, pos, id) -> {
+            String idSeleccionado = String.valueOf(ids.get(pos));
+            mostrarDialogoExito(idSeleccionado);
+        });
+        builder.setView(lv);
+        builder.setPositiveButton("Cerrar", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+    private void mostrarDialogoExito(String reservaId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.activity_exito, null);
+        builder.setView(view);
+
+        ImageView ivQR = view.findViewById(R.id.ivCodigoQR);
+        Button btnCerrar = view.findViewById(R.id.btnVolverInicio);
+        btnCerrar.setText("Aceptar");
+
+        try {
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap bitmap = barcodeEncoder.encodeBitmap("Ticket-Ruta360-ID:" + reservaId, BarcodeFormat.QR_CODE, 500, 500);
+            ivQR.setImageBitmap(bitmap);
+        } catch (Exception e) { e.printStackTrace(); }
+
+        AlertDialog dialog = builder.create();
+        btnCerrar.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
     }
 

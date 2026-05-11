@@ -14,4 +14,10 @@
         <item>Masculino</item>
         <item>Otro</item>
     </string-array>
+
+    <string-array name="monedas_array">
+        <item>Dólar Americano (USD)</item>
+        <item>Euro (EUR)</item>
+        <item>Pesos Colombianos (COP)</item>
+    </string-array>
 </resources>

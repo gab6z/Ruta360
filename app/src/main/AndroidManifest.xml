@@ -20,6 +20,7 @@
         <activity
             android:name=".Registrarse"
             android:exported="false" />
+        <activity android:name=".resumen_reserva" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">

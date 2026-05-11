@@ -12,6 +12,10 @@
         android:id="@+id/mp_ayuda"
         android:title="Ayuda" />
     <item
+        android:id="@+id/mp_historial"
+        android:title="Historial de reservas"
+        android:icon="@android:drawable/ic_menu_agenda"/>
+    <item
         android:id="@+id/mp_cerrar_sesion"
         android:title="Cerrar sesión" />
 </menu>
