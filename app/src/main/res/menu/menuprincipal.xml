@@ -3,12 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/mp_consultausuario"
-        android:title="Consultar usuario" />
+        android:id="@+id/mp_perfil"
+        android:title="Perfil" />
     <item
         android:id="@+id/mp_acercade"
         android:title="Acerca de" />
     <item
         android:id="@+id/mp_ayuda"
         android:title="Ayuda" />
+    <item
+        android:id="@+id/mp_cerrar_sesion"
+        android:title="Cerrar sesión" />
 </menu>

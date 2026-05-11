@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#FFFFFF">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Centro de Ayuda"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="¿Cómo usar Ruta 360?\n\n• Inicie sesión con sus credenciales.\n• Registre nuevos usuarios desde el formulario.\n• Use 'Mostrar Datos' para visualizar la información almacenada.\n• Utilice el menú para acceder a más opciones.\n\nSoporte Técnico:\nsoporte@ruta360.com\n\nHorario:\nLunes a Viernes\n08:00 AM - 05:00 PM"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="25dp"/>
+
+    <Button
+        android:id="@+id/btnCerrarAyuda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cerrar"
+        android:backgroundTint="#4B944E"
+        android:textColor="#FFFFFF"/>
+
+</LinearLayout>
+
+
+

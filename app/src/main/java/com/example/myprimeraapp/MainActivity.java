@@ -3,11 +3,13 @@ package com.example.myprimeraapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.appcompat.app.AlertDialog;
+
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -58,8 +62,32 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
 
         btnTopPerfil.setOnClickListener(v -> {
-            Intent intentPerfil = new Intent(MainActivity.this, PerfilActivity.class);
-            startActivity(intentPerfil);
+
+            PopupMenu popupMenu = new PopupMenu(MainActivity.this, btnTopPerfil);
+            popupMenu.getMenuInflater().inflate(R.menu.menuprincipal, popupMenu.getMenu());
+
+            popupMenu.setOnMenuItemClickListener(item -> {
+                int id = item.getItemId();
+                if (id == R.id.mp_perfil) {
+                    Intent intent = new Intent(this, PerfilActivity.class);
+                    startActivity(intent);
+                    return true;
+                }
+                if (id == R.id.mp_acercade) {
+                    mostrarAcercaDe();
+                    return true;
+                }
+                if (id == R.id.mp_ayuda) {
+                    mostrarAyuda();
+                    return true;
+                }
+                if (item.getItemId() == R.id.mp_cerrar_sesion) {
+                    borrarPreferenciasYSalir();
+                    return true;
+                }
+                return false;
+            });
+            popupMenu.show();
         });
 
         BottomNavigationView barraNavegacion = findViewById(R.id.barra_navegacion);
@@ -102,19 +130,52 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.mp_consultausuario) {
-            // Este botón de tu menú superior lo tienes apuntando a Registrarse
-            Intent intent = new Intent(this, Registrarse.class);
-            startActivity(intent);
 
+        if (item.getItemId() == R.id.mp_perfil) {
+            Intent intent = new Intent(this, PerfilActivity.class);
+            startActivity(intent);
+            return true;
         }
         if (item.getItemId() == R.id.mp_acercade) {
-            Toast.makeText(this, "Acerca de", Toast.LENGTH_SHORT).show();
+            mostrarAcercaDe();
+            return true;
         }
         if (item.getItemId() == R.id.mp_ayuda) {
-            Toast.makeText(this, "Ayuda", Toast.LENGTH_SHORT).show();
+            mostrarAyuda();
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void mostrarAcercaDe() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_acercade, null);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        Button btnCerrar = view.findViewById(R.id.btnCerrar);
+        btnCerrar.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
+    }
+
+    private void mostrarAyuda()
+    {
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(this);
+        View view =
+                getLayoutInflater().inflate(
+                        R.layout.dialog_ayuda,
+                        null
+                );
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        Button btnCerrarAyuda =
+                view.findViewById(R.id.btnCerrarAyuda);
+        btnCerrarAyuda.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+        dialog.show();
     }
 
     private void borrarPreferenciasYSalir() {
