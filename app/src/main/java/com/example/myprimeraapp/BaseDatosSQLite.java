@@ -11,6 +11,13 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
     public static final int Version = 1;
     public static final String tablaUsuario = "CREATE TABLE usuario (id INTEGER PRIMARY KEY AUTOINCREMENT, cedula TEXT, nombres TEXT,apellidos TEXT,edad INTEGER,nacionalidad TEXT, genero TEXT, estadoCivil TEXT, correo TEXT, contraseña TEXT, fechaNac TEXT, nivelIngles REAL)";
 
+    public static final String tablaReservas = "CREATE TABLE reservas (" +
+            "id_reserva INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "usuario_id TEXT, " +
+            "destino TEXT, " +
+            "fecha_viaje TEXT, " +
+            "metodo_pago TEXT, " +
+            "total_pagar DOUBLE)";
     public BaseDatosSQLite(Context context) {
         super(context, dbName, null, Version);
     }
@@ -18,11 +25,13 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(tablaUsuario);
+        sqLiteDatabase.execSQL(tablaReservas);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS usuario");
+        db.execSQL("DROP TABLE IF EXISTS reservas");
         onCreate(db);
     }
 
@@ -68,5 +77,11 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
         int filasAfectadas = db.update("usuario", values, "correo=?", new String[]{correoActual});
         db.close();
         return filasAfectadas > 0;
+    }
+
+    public void eliminarReserva(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("reservas", "id = ?", new String[]{String.valueOf(id)});
+        db.close();
     }
 }
