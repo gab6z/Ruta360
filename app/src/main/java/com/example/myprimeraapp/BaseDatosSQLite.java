@@ -11,6 +11,7 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
     public static final int Version = 1;
     public static final String tablaUsuario = "CREATE TABLE usuario (id INTEGER PRIMARY KEY AUTOINCREMENT, cedula TEXT, nombres TEXT,apellidos TEXT,edad INTEGER,nacionalidad TEXT, genero TEXT, estadoCivil TEXT, correo TEXT, contraseña TEXT, fechaNac TEXT, nivelIngles REAL)";
 
+    //nueva tabla
     public static final String tablaReservas = "CREATE TABLE reservas (" +
             "id_reserva INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "usuario_id TEXT, " +
@@ -46,6 +47,7 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM usuario WHERE correo=?", new String[]{correo});
     }
+
     public boolean actualizarUsuario(String correoActual, String nuevosNombres, String nuevaClave) {
         SQLiteDatabase db = this.getWritableDatabase();
         android.content.ContentValues values = new android.content.ContentValues();
@@ -56,6 +58,8 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
         db.close();
         return filasAfectadas > 0;
     }
+
+
     public boolean eliminarUsuario(String correo) {
         SQLiteDatabase db = this.getWritableDatabase();
         int filasBorradas = db.delete("usuario", "correo=?", new String[]{correo});
@@ -78,6 +82,7 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
         db.close();
         return filasAfectadas > 0;
     }
+
 
     public void eliminarReserva(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
