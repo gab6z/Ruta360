@@ -103,10 +103,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.mp_consultausuario) {
-            // Este botón de tu menú superior lo tienes apuntando a Registrarse
             Intent intent = new Intent(this, Registrarse.class);
             startActivity(intent);
-
         }
         if (item.getItemId() == R.id.mp_acercade) {
             Toast.makeText(this, "Acerca de", Toast.LENGTH_SHORT).show();
