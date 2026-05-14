@@ -21,9 +21,6 @@
             android:name=".PerfilActivity"
             android:exported="false" />
         <activity
-            android:name=".activity_perfil"
-            android:exported="false" />
-        <activity
             android:name=".Registrarse"
             android:exported="false" />
         <activity android:name=".resumen_reserva" />
