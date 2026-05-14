@@ -75,7 +75,6 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <!-- CABECERA: Círculo y Datos -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -83,7 +82,6 @@
                         android:gravity="center_vertical"
                         android:layout_marginBottom="25dp">
 
-                        <!-- CÍRCULO GIGANTE -->
                         <LinearLayout
                             android:layout_width="80dp"
                             android:layout_height="80dp"
@@ -128,7 +126,6 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- LOS CAMPOS EDITABLES (Puedes añadir más aquí replicando esta estructura) -->
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
