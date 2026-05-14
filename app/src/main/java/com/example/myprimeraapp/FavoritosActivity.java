@@ -40,17 +40,13 @@ public class FavoritosActivity extends AppCompatActivity {
                     return insets;
                 });
 
-        // SQLITE
         baseDatos = new BaseDatosSQLite(this);
 
-        // RECYCLERVIEW
         recyclerFavoritos = findViewById(R.id.recyclerFavoritos);
         recyclerFavoritos.setLayoutManager(new LinearLayoutManager(this));
 
-        // LISTA
         listaFavoritos = new ArrayList<>();
 
-        // ADAPTER
         adapter = new DestinoAdapter(listaFavoritos);
         recyclerFavoritos.setAdapter(adapter);
 
