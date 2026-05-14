@@ -19,6 +19,12 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
             "fecha_viaje TEXT, " +
             "metodo_pago TEXT, " +
             "total_pagar DOUBLE)";
+    public static final String tablaPaquetes = "CREATE TABLE paquetes (" +
+            "id_paquete INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "alojamiento TEXT, " +
+            "alimentacion TEXT, " +
+            "transporte TEXT, " +
+            "precio_total REAL)";
     public BaseDatosSQLite(Context context) {
         super(context, dbName, null, Version);
     }
@@ -27,12 +33,14 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(tablaUsuario);
         sqLiteDatabase.execSQL(tablaReservas);
+        sqLiteDatabase.execSQL(tablaPaquetes);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS usuario");
         db.execSQL("DROP TABLE IF EXISTS reservas");
+        db.execSQL("DROP TABLE IF EXISTS paquetes");
         onCreate(db);
     }
 
@@ -88,5 +96,35 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("reservas", "id = ?", new String[]{String.valueOf(id)});
         db.close();
+    }
+
+    // TORRES
+    public long guardarPaquete(String hotel, String comida, String trans, double total) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        android.content.ContentValues v = new android.content.ContentValues();
+        v.put("alojamiento", hotel);
+        v.put("alimentacion", comida);
+        v.put("transporte", trans);
+        v.put("precio_total", total);
+        return db.insert("paquetes", null, v);
+    }
+
+    // UPDATE: Modificar
+    public boolean actualizarPaquete(int id, String hotel, String transporte, double total) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        android.content.ContentValues values = new android.content.ContentValues();
+        values.put("alojamiento", hotel);
+        values.put("transporte", transporte);
+        values.put("precio_total", total);
+
+        int resultado = db.update("paquetes", values, "id_paquete = ?", new String[]{String.valueOf(id)});
+        db.close();
+        return resultado > 0;
+    }
+
+    // DELETE: Borrar
+    public boolean eliminarPaquete(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete("paquetes", "id_paquete = ?", new String[]{String.valueOf(id)}) > 0;
     }
 }
