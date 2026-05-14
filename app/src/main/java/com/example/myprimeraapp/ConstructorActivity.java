@@ -10,11 +10,9 @@ import androidx.cardview.widget.CardView;
 
 public class ConstructorActivity extends AppCompatActivity {
 
-    // Tarjetas Alojamiento
     CardView cardEco, cardHotel, cardResort;
-    // Tarjetas Alimentación
     CardView cardBasica, cardMedia, cardTodo;
-    // Tarjetas Transporte
+
     CardView cardBus, cardTren, cardVuelo;
 
     TextView tvDetalle, tvSubtotal, tvIva, tvPrecioFinal;
@@ -44,7 +42,6 @@ public class ConstructorActivity extends AppCompatActivity {
     }
 
     private void configurarSelecciones() {
-        // --- ALOJAMIENTO ---
         cardEco.setOnClickListener(v -> {
             pintarSeleccion(cardEco, cardHotel, cardResort);
             pAloj = 50; nAloj = "Eco Lodge"; actualizarUI();
@@ -58,7 +55,6 @@ public class ConstructorActivity extends AppCompatActivity {
             pAloj = 300; nAloj = "Resort Luxury"; actualizarUI();
         });
 
-        // --- ALIMENTACIÓN ---
         cardBasica.setOnClickListener(v -> {
             pintarSeleccion(cardBasica, cardMedia, cardTodo);
             pAlim = 20; nAlim = "Básico"; actualizarUI();
@@ -86,8 +82,6 @@ public class ConstructorActivity extends AppCompatActivity {
             pTrans = 250; nTrans = "Vuelo"; actualizarUI();
         });
     }
-
-    // Pinta la seleccionada de celeste claro y las otras de blanco
     private void pintarSeleccion(CardView seleccionada, CardView op2, CardView op3) {
         seleccionada.setCardBackgroundColor(Color.parseColor("#E1F5FE")); // Celeste
         op2.setCardBackgroundColor(Color.WHITE);
