@@ -12,14 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyPrimeraApp">
         <activity
-            android:name=".PerfilActivity"
+            android:name=".FavoritosActivity"
             android:exported="false" />
         <activity
-            android:name=".activity_perfil"
+            android:name=".ExplorarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PerfilActivity"
             android:exported="false" />
         <activity
             android:name=".Registrarse"
             android:exported="false" />
+        <activity android:name=".resumen_reserva" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">

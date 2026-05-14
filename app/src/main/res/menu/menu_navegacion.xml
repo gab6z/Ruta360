@@ -7,11 +7,17 @@
         android:icon="@android:drawable/ic_menu_view"
         android:title="Inicio" />
 
-    <!-- Explorar  -->
+    <!-- Explorar -->
     <item
         android:id="@+id/nav_explorar"
         android:icon="@android:drawable/ic_menu_compass"
         android:title="Explorar" />
+
+    <!-- Favoritos -->
+    <item
+        android:id="@+id/nav_favoritos"
+        android:icon="@android:drawable/btn_star_big_on"
+        android:title="Favoritos" />
 
     <!-- Crear -->
     <item

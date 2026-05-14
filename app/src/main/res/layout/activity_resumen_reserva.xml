@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".resumen_reserva">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:background="#F5F5F5">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resumen de tu Reserva"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#1A237E"
+            android:layout_marginBottom="20dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp">
+            <LinearLayout
+                android:padding="15dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView android:id="@+id/tvDestinoSeleccionado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Destino: Ruta del Spondylus"
+                    android:textStyle="bold"/>
+                <TextView android:id="@+id/tvPrecioBase"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Precio Total: $150.00"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tvFechaElegida"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seleccione Fecha de Viaje:" />
+        <Button
+            android:id="@+id/btnSeleccionarFecha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Elegir Fecha"
+            android:backgroundTint="#4B944E"
+            android:layout_marginBottom="15dp"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Método de Pago:"/>
+        <RadioGroup
+            android:id="@+id/rgMetodoPago"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton android:id="@+id/rbTarjeta" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tarjeta"/>
+            <RadioButton android:id="@+id/rbTransferencia" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Efectivo/Puntos"/>
+        </RadioGroup>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Moneda de pago:"/>
+        <Spinner
+            android:id="@+id/spMoneda"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"/>
+
+        <CheckBox
+            android:id="@+id/cbTerminosReserva"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Acepto las políticas de cancelación."/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardInfoEfectivo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="#E3F2FD">
+
+            <LinearLayout
+                android:padding="15dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Instrucciones de Depósito:"
+                    android:textStyle="bold"
+                    android:textColor="#1565C0"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Banco Internacional\nCuenta Corriente: 1020304050\nA nombre de: Ruta360 S.A.\nConcepto: Pago de Reserva"
+                    android:textSize="14sp"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/btnConfirmarCheckout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Proceder al Pago"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#1A237E"/>
+
+        <Button
+            android:id="@+id/btnCerrar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Regresar"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#4B944E"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
