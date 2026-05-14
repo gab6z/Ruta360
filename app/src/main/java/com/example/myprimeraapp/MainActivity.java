@@ -189,11 +189,11 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
 
                 } else if (id == R.id.nav_crear) {
-                    // Módulo de Torres
-                    Toast.makeText(this, "Ir a Crear Paquete - Módulo de Torres", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, ConstructorActivity.class);
+                    startActivity(intent);
 
                 } else if (id == R.id.nav_carrito) {
-                    // Módulo de Chavez
+
                     Intent intent = new Intent(MainActivity.this, resumen_reserva.class);
                     startActivity(intent);
                 } else if (id == R.id.nav_social) {

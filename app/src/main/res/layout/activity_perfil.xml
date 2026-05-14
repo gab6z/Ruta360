@@ -15,7 +15,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- BARRA SUPERIOR (Vuelve al Home al tocarla) -->
             <LinearLayout
                 android:id="@+id/barra_volver_home"
                 android:layout_width="match_parent"
@@ -36,10 +35,7 @@
                     android:layout_marginRight="10dp"
                     android:src="@android:drawable/ic_menu_revert"
                     app:tint="#00695C" />
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/logo_login" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -42,11 +42,9 @@ public class DestinoAdapter extends RecyclerView.Adapter<DestinoAdapter.ViewHold
         );
         holder.txtPrecio.setText("$" + destino.getPrecio()
         );
-        // ICONO EMOJI
         holder.txtIcono.setText(destino.getIcono()
         );
 
-        // COLOR DINAMICO
         try {
             holder.imgDestino.setBackgroundColor(Color.parseColor(destino.getColor()));
 
@@ -55,16 +53,12 @@ public class DestinoAdapter extends RecyclerView.Adapter<DestinoAdapter.ViewHold
             holder.imgDestino.setBackgroundColor(Color.LTGRAY);
         }
 
-        // SQLITE
         BaseDatosSQLite baseDatos = new BaseDatosSQLite(holder.itemView.getContext());
 
-        // USUARIO TEMPORAL
         String usuario = "LP";
 
-        // VALIDAR FAVORITO
         boolean esFavorito = baseDatos.esFavorito(usuario, destino.getIdDestino());
 
-        // CAMBIAR ICONO
         if (esFavorito) {
             holder.btnFavorito.setImageResource(android.R.drawable.btn_star_big_on);
 
@@ -73,22 +67,19 @@ public class DestinoAdapter extends RecyclerView.Adapter<DestinoAdapter.ViewHold
             holder.btnFavorito.setImageResource(android.R.drawable.btn_star_big_off);
         }
 
-        // CLICK FAVORITO
+
         holder.btnFavorito.setOnClickListener(v -> {
             boolean favoritoActual = baseDatos.esFavorito(usuario, destino.getIdDestino());
 
-            // SI YA EXISTE -> ELIMINA
-            if (favoritoActual) {
 
+            if (favoritoActual) {
                 baseDatos.eliminarFavorito(usuario, destino.getIdDestino());
                 holder.btnFavorito.setImageResource(android.R.drawable.btn_star_big_off);
 
-                // ELIMINAR VISUALMENTE
                 listaDestinos.remove(position);notifyItemRemoved(position);
                 notifyItemRangeChanged(position, listaDestinos.size());
             }
 
-            // SI NO EXISTE -> AGREGA
             else {
                 baseDatos.agregarFavorito(usuario, destino.getIdDestino()
                 );
