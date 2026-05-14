@@ -18,7 +18,6 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,16 +25,22 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.appcompat.app.AlertDialog;
-
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private RecyclerView recyclerDestacados;
+    private RecyclerView recyclerMejores;
+    private DestinoAdapter adapterDestacados;
+    private DestinoAdapter adapterMejores;
+    private ArrayList<Destino> listaDestacados;
+    private ArrayList<Destino> listaMejores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,17 +64,78 @@ public class MainActivity extends AppCompatActivity {
         android.widget.TextView txtIniciales = findViewById(R.id.txt_iniciales_main);
 
         BaseDatosSQLite db = new BaseDatosSQLite(this);
+
         android.database.Cursor cursor = db.obtenerUsuario(usuarioCorreo);
         if (cursor.moveToFirst()) {
+
             String nom = cursor.getString(cursor.getColumnIndexOrThrow("nombres"));
+
             String ape = cursor.getString(cursor.getColumnIndexOrThrow("apellidos"));
 
             String iniciales = "";
-            if(!nom.isEmpty()) iniciales += nom.substring(0, 1);
-            if(!ape.isEmpty()) iniciales += ape.substring(0, 1);
+            if (!nom.isEmpty()) {iniciales += nom.substring(0, 1);}
+            if (!ape.isEmpty()) {iniciales += ape.substring(0, 1);}
             txtIniciales.setText(iniciales.toUpperCase());
         }
-        cursor.close();
+
+        recyclerDestacados = findViewById(R.id.recyclerDestacados);
+        recyclerMejores = findViewById(R.id.recyclerMejores);
+
+        LinearLayoutManager layoutDestacados =
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+
+        recyclerDestacados.setLayoutManager(layoutDestacados);
+        recyclerDestacados.setHasFixedSize(true);
+        recyclerDestacados.setNestedScrollingEnabled(false);
+
+        LinearLayoutManager layoutMejores =
+                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
+        recyclerMejores.setLayoutManager(layoutMejores);
+        recyclerMejores.setHasFixedSize(true);
+        recyclerMejores.setNestedScrollingEnabled(false);
+
+        listaDestacados = db.obtenerDestacados();
+        listaMejores = db.obtenerMejoresValorados();
+
+        adapterDestacados = new DestinoAdapter(listaDestacados);
+        adapterMejores = new DestinoAdapter(listaMejores);
+
+        recyclerDestacados.setAdapter(adapterDestacados);
+        recyclerMejores.setAdapter(adapterMejores);
+
+        recyclerDestacados.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(android.graphics.Rect outRect,
+                                       android.view.View view,
+                                       androidx.recyclerview.widget.RecyclerView parent,
+                                       androidx.recyclerview.widget.RecyclerView.State state) {
+                outRect.right = 24;
+            }
+        });
+
+        recyclerMejores.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(android.graphics.Rect outRect,
+                                       android.view.View view,
+                                       androidx.recyclerview.widget.RecyclerView parent,
+                                       androidx.recyclerview.widget.RecyclerView.State state) {
+                outRect.bottom = 20;
+            }
+        });
+
+        Button btnBuscarHome = findViewById(R.id.btnBuscarHome);
+        TextInputEditText txtBuscarDestino = findViewById(R.id.txtBuscarDestino);
+        TextInputEditText txtPresupuesto = findViewById(R.id.txtPresupuesto);
+
+        btnBuscarHome.setOnClickListener(v -> {
+            String destino = txtBuscarDestino.getText().toString().trim();
+            String precio = txtPresupuesto.getText().toString().trim();
+            Intent intent = new Intent(MainActivity.this, ExplorarActivity.class);
+            intent.putExtra("destino", destino);
+            intent.putExtra("precio", precio);
+            startActivity(intent);
+        });
 
         btnTopPerfil.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(MainActivity.this, btnTopPerfil);
@@ -113,8 +179,14 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, "Estás en Inicio", Toast.LENGTH_SHORT).show();
 
                 } else if (id == R.id.nav_explorar) {
-                    // Módulo de Palacios
-                    Toast.makeText(this, "Ir a Explorar - Módulo de Palacios", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(MainActivity.this, ExplorarActivity.class);
+                    startActivity(intent);
+
+                } else if (id == R.id.nav_favoritos) {
+
+                    Intent intent = new Intent(MainActivity.this, FavoritosActivity.class);
+                    startActivity(intent);
 
                 } else if (id == R.id.nav_crear) {
                     // Módulo de Torres
