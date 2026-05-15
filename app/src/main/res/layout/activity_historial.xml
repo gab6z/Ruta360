@@ -1,39 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".resumen_reserva">
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="#F9F6F0">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mis Reservas Realizadas"
+        android:textColor="#001F3F"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="15dp"/>
+
+    <EditText
+        android:id="@+id/etBuscarReserva"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="50dp"
+        android:background="@android:drawable/editbox_background"
+        android:drawablePadding="10dp"
+        android:hint="Buscar por destino..."
+        android:paddingLeft="15dp"
+        android:layout_marginBottom="15dp"
+        android:inputType="text"
+        android:textColorHint="#888888"/>
 
-        <TextView
-            android:id="@+id/tvTituloHistorial"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mis Reservas"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="10dp"/>
+    <ListView
+        android:id="@+id/lvReservas"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="#DDDDDD"
+        android:dividerHeight="1dp"
+        android:padding="5dp" />
 
-        <ListView
-            android:id="@+id/lvReservas"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/btnCerrarHistorial"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Regresar"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#4B944E"/>
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/btnCerrarHistorial"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="15dp"
+        android:text="REGRESAR"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:backgroundTint="#4B944E"
+        app:cornerRadius="15dp"/>
+</LinearLayout>

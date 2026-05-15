@@ -118,11 +118,6 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
         return filasAfectadas > 0;
     }
 
-    public void eliminarReserva(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("reservas", "id = ?", new String[]{String.valueOf(id)});
-        db.close();
-    }
 
     public void insertarDestinosIniciales() {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -267,6 +262,42 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
         long id = db.insert("paquetes", null, values);
         db.close();
         return id;
+    }
+
+    public ArrayList<Destino> buscarDestinosPorNombre(String consulta) {
+        ArrayList<Destino> lista = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM destinos WHERE nombre LIKE ?", new String[]{"%" + consulta + "%"});
+
+        if (cursor.moveToFirst()) {
+            do {
+                lista.add(new Destino(
+                        cursor.getInt(0), cursor.getString(1), cursor.getString(2),
+                        cursor.getDouble(3), cursor.getDouble(4), cursor.getString(5),
+                        cursor.getString(6), cursor.getString(7), cursor.getString(8)
+                ));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return lista;
+    }
+
+
+    public boolean actualizarReserva(int idReserva, String nuevaFecha, String nuevoMetodo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("fecha_viaje", nuevaFecha);
+        values.put("metodo_pago", nuevoMetodo);
+
+        int resultado = db.update("reservas", values, "id_reserva = ?", new String[]{String.valueOf(idReserva)});
+        db.close();
+        return resultado > 0;
+    }
+
+    public void eliminarReserva(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("reservas", "id_reserva = ?", new String[]{String.valueOf(id)});
+        db.close();
     }
 
 }

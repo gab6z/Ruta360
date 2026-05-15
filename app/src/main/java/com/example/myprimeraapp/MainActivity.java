@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -267,41 +268,87 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void mostrarHistorialDialogo() {
-        Toast.makeText(this, "Intentando abrir historial...", Toast.LENGTH_SHORT).show();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Mis Reservas Recientes");
+        // Asegúrate de que este sea el nombre de tu archivo XML
+        View view = getLayoutInflater().inflate(R.layout.activity_historial, null);
 
-        ListView lv = new ListView(this);
-        ArrayList<String> lista = new ArrayList<>();
-        ArrayList<Integer> ids = new ArrayList<>();
+        ListView lv = view.findViewById(R.id.lvReservas);
+        EditText etBuscar = view.findViewById(R.id.etBuscarReserva);
+        Button btnCerrar = view.findViewById(R.id.btnCerrarHistorial);
+
+        ArrayList<String> listaStrings = new ArrayList<>();
+        ArrayList<Integer> listaIds = new ArrayList<>();
 
         BaseDatosSQLite helper = new BaseDatosSQLite(this);
         SQLiteDatabase db = helper.getReadableDatabase();
 
         Cursor c = db.rawQuery("SELECT * FROM reservas", null);
 
-        if (c.getCount() == 0) {
-            Toast.makeText(this, "No tienes reservas registradas aún", Toast.LENGTH_LONG).show();
-            c.close();
-            return;
-        }
+        int contador = 1;
 
         while (c.moveToNext()) {
-            ids.add(c.getInt(0));
-            lista.add("Ticket #" + c.getInt(0) + "\nDestino: " + c.getString(2));
+            int idRealBD = c.getInt(0);
+            String destino = c.getString(2);
+            String fecha = c.getString(3);
+            double monto = c.getDouble(5);
+
+            listaIds.add(idRealBD);
+
+            // Formato amigable solicitado
+            String itemLista = "📍 Reserva " + contador + "\n" +
+                    "Destino: " + destino + "\n" +
+                    "Fecha: " + fecha + "\n" +
+                    "Monto: $" + String.format("%.2f", monto);
+
+            listaStrings.add(itemLista);
+            contador++;
         }
         c.close();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lista);
+        if (listaStrings.isEmpty()) {
+            Toast.makeText(this, "Aún no tienes reservas", Toast.LENGTH_SHORT).show();
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listaStrings);
         lv.setAdapter(adapter);
 
-        lv.setOnItemClickListener((p, v, pos, id) -> {
-            String idSeleccionado = String.valueOf(ids.get(pos));
-            mostrarDialogoExito(idSeleccionado);
+        builder.setView(view);
+        AlertDialog dialogHistorial = builder.create();
+
+        etBuscar.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.getFilter().filter(s);
+            }
+            @Override
+            public void afterTextChanged(android.text.Editable s) {}
         });
-        builder.setView(lv);
-        builder.setPositiveButton("Cerrar", (dialog, which) -> dialog.dismiss());
-        builder.show();
+
+        lv.setOnItemLongClickListener((parent, v, position, id) -> {
+            int idReservaEliminar = listaIds.get(position);
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Eliminar Reserva")
+                    .setMessage("¿Deseas cancelar esta reserva permanentemente?")
+                    .setPositiveButton("Sí, eliminar", (d, w) -> {
+                        helper.eliminarReserva(idReservaEliminar);
+                        Toast.makeText(this, "Reserva eliminada", Toast.LENGTH_SHORT).show();
+                        dialogHistorial.dismiss();
+                        mostrarHistorialDialogo();
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+            return true;
+        });
+
+        lv.setOnItemClickListener((p, v, pos, id) -> {
+            mostrarDialogoExito(String.valueOf(listaIds.get(pos)));
+        });
+
+        btnCerrar.setOnClickListener(v -> dialogHistorial.dismiss());
+        dialogHistorial.show();
     }
     private void mostrarDialogoExito(String reservaId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

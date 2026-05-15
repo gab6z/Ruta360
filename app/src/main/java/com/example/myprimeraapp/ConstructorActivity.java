@@ -1,5 +1,6 @@
 package com.example.myprimeraapp;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
@@ -36,6 +37,20 @@ public class ConstructorActivity extends AppCompatActivity {
                 Toast.makeText(this, "Paquete guardado (ID: " + id + ")", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Arma tu paquete primero", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Button btnCarrito = findViewById(R.id.btnAgregarCarrito);
+        btnCarrito.setOnClickListener(v -> {
+            if (totalFinal > 0) {
+                Intent resultado = new Intent();
+                resultado.putExtra("paquete_nombre", nAloj + " + " + nAlim + " + " + nTrans);
+                resultado.putExtra("paquete_precio", totalFinal);
+
+                setResult(RESULT_OK, resultado);
+                finish();
+            } else {
+                Toast.makeText(this, "Primero selecciona tus opciones", Toast.LENGTH_SHORT).show();
             }
         });
     }

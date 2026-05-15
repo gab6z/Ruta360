@@ -1,5 +1,6 @@
 package com.example.myprimeraapp;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,6 +88,19 @@ public class DestinoAdapter extends RecyclerView.Adapter<DestinoAdapter.ViewHold
                 holder.btnFavorito.setImageResource(android.R.drawable.btn_star_big_on
                 );
             }
+        });
+
+        holder.btnReservar.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), resumen_reserva.class);
+
+            // Pasamos todos los datos necesarios
+            intent.putExtra("nombre_destino", destino.getNombre());
+            intent.putExtra("precio_destino", destino.getPrecio());
+            intent.putExtra("rating_destino", destino.getCalificacion());
+            intent.putExtra("ubicacion_destino", destino.getUbicacion());
+
+            // Iniciamos la actividad
+            v.getContext().startActivity(intent);
         });
     }
 
