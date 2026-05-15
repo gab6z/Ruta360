@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,10 +16,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -33,6 +30,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
+import android.widget.AutoCompleteTextView;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -82,15 +81,15 @@ public class MainActivity extends AppCompatActivity {
         recyclerDestacados = findViewById(R.id.recyclerDestacados);
         recyclerMejores = findViewById(R.id.recyclerMejores);
 
-        LinearLayoutManager layoutDestacados =
-                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutDestacados = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,
+                false);
 
         recyclerDestacados.setLayoutManager(layoutDestacados);
         recyclerDestacados.setHasFixedSize(true);
         recyclerDestacados.setNestedScrollingEnabled(false);
 
-        LinearLayoutManager layoutMejores =
-                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutMejores = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,
+                false);
 
         recyclerMejores.setLayoutManager(layoutMejores);
         recyclerMejores.setHasFixedSize(true);
@@ -129,12 +128,36 @@ public class MainActivity extends AppCompatActivity {
         TextInputEditText txtBuscarDestino = findViewById(R.id.txtBuscarDestino);
         TextInputEditText txtPresupuesto = findViewById(R.id.txtPresupuesto);
 
+        AutoCompleteTextView spinnerOrigen = findViewById(R.id.spinnerOrigen);
+
+        String[] origenes = {
+                "Guayaquil",
+                "Quito"
+        };
+
+        ArrayAdapter<String> adapterOrigen = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, origenes);
+        spinnerOrigen.setAdapter(adapterOrigen);
+        spinnerOrigen.setText("Guayaquil", false);
+
         btnBuscarHome.setOnClickListener(v -> {
+
+            String origen = spinnerOrigen.getText().toString().trim();
             String destino = txtBuscarDestino.getText().toString().trim();
             String precio = txtPresupuesto.getText().toString().trim();
+
+            if (origen.isEmpty()) {
+
+                Toast.makeText(MainActivity.this, "Seleccione un origen", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            SharedPreferences preferences = getSharedPreferences("Ruta360Prefs", MODE_PRIVATE);
+            preferences.edit().putString("origenSeleccionado", origen).apply();
             Intent intent = new Intent(MainActivity.this, ExplorarActivity.class);
+            intent.putExtra("origen", origen);
             intent.putExtra("destino", destino);
             intent.putExtra("precio", precio);
+
             startActivity(intent);
         });
 
