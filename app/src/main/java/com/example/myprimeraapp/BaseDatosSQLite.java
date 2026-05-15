@@ -269,4 +269,34 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
         return id;
     }
 
+
+    // Buscar usuario por Cédula
+    public Cursor buscarPorCedula(String cedula) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM usuario WHERE cedula=?", new String[]{cedula});
+    }
+
+    // Actualizar usuario por Cédula
+    public boolean actualizarPorCedula(String cedula, String nombres, String apellidos, String correo, String edad) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        android.content.ContentValues values = new android.content.ContentValues();
+        values.put("nombres", nombres);
+        values.put("apellidos", apellidos);
+        values.put("correo", correo);
+        values.put("edad", edad);
+
+        int filas = db.update("usuario", values, "cedula=?", new String[]{cedula});
+        db.close();
+        return filas > 0;
+    }
+
+    // Eliminar usuario por Cédula
+    public boolean eliminarPorCedula(String cedula) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int filas = db.delete("usuario", "cedula=?", new String[]{cedula});
+        db.close();
+        return filas > 0;
+    }
+
+
 }

@@ -1,5 +1,7 @@
 package com.example.myprimeraapp;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -16,11 +18,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -164,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                     borrarPreferenciasYSalir();
                     return true;
                 }
+
                 return false;
             });
             popupMenu.show();
@@ -228,10 +229,12 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.mp_ayuda) {
             mostrarAyuda();
             return true;
-        }if(item.getItemId() == R.id.mp_historial){
+        }
+        if (item.getItemId() == R.id.mp_historial) {
             mostrarHistorialDialogo();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
