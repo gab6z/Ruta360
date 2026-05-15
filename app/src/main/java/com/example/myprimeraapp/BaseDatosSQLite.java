@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class BaseDatosSQLite extends SQLiteOpenHelper {
 
     public static final String dbName = "Ruta360.db";
-    public static final int Version = 3;
+    public static final int Version = 4;
 
     public static final String tablaUsuario = "CREATE TABLE usuario (id INTEGER PRIMARY KEY AUTOINCREMENT, cedula TEXT, nombres TEXT,apellidos TEXT,edad INTEGER,nacionalidad TEXT, genero TEXT, estadoCivil TEXT, correo TEXT, contraseña TEXT, fechaNac TEXT, nivelIngles REAL)";
 
@@ -40,8 +40,16 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
                     "usuario TEXT, " +
                     "destino_id INTEGER)";
 
+    public static final String tablaTarifas =
+            "CREATE TABLE tarifas (" +
+                    "id_tarifa INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "origen TEXT, " +
+                    "destino_id INTEGER, " +
+                    "precio DOUBLE)";
+
     public static final String tablaPaquetes = "CREATE TABLE paquetes (" +
             "id_paquete INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "destino TEXT, " +
             "alojamiento TEXT, " +
             "alimentacion TEXT, " +
             "transporte TEXT, " +
@@ -57,6 +65,7 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(tablaReservas);
         sqLiteDatabase.execSQL(tablaDestinos);
         sqLiteDatabase.execSQL(tablaFavoritos);
+        sqLiteDatabase.execSQL(tablaTarifas);
         sqLiteDatabase.execSQL(tablaPaquetes);
     }
 
@@ -66,6 +75,7 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS reservas");
         db.execSQL("DROP TABLE IF EXISTS destinos");
         db.execSQL("DROP TABLE IF EXISTS favoritos");
+        db.execSQL("DROP TABLE IF EXISTS tarifas");
         db.execSQL("DROP TABLE IF EXISTS paquetes");
         onCreate(db);
     }
@@ -118,16 +128,16 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
         return filasAfectadas > 0;
     }
 
-    public void eliminarReserva(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("reservas", "id = ?", new String[]{String.valueOf(id)});
-        db.close();
-    }
 
     public void insertarDestinosIniciales() {
+
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM destinos", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM destinos", null
+        );
+
         if (cursor.getCount() == 0) {
+
+            // DESTINOS
             db.execSQL("INSERT INTO destinos VALUES(null,'Montañita','Ecuador',250,4.8,'Playa','Nacional','🌴','#03A9F4')");
             db.execSQL("INSERT INTO destinos VALUES(null,'Baños','Ecuador',180,4.7,'Montaña','Nacional','⛰️','#8D6E63')");
             db.execSQL("INSERT INTO destinos VALUES(null,'Galápagos','Ecuador',900,5.0,'Playa','Nacional','🐢','#00ACC1')");
@@ -138,7 +148,32 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
             db.execSQL("INSERT INTO destinos VALUES(null,'Cancún','México',1200,4.9,'Lujo','Internacional','✨','#FBC02D')");
             db.execSQL("INSERT INTO destinos VALUES(null,'París','Francia',2500,5.0,'Ciudad','Internacional','🗼','#5C6BC0')");
             db.execSQL("INSERT INTO destinos VALUES(null,'Bali','Indonesia',1800,4.9,'Playa','Internacional','🌺','#26C6DA')");
+
+            // TARIFAS DESDE GUAYAQUIL
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Guayaquil',1,250)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Guayaquil',2,180)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Guayaquil',3,900)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Guayaquil',4,220)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Guayaquil',5,150)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Guayaquil',6,650)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Guayaquil',7,700)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Guayaquil',8,1200)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Guayaquil',9,2500)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Guayaquil',10,1800)");
+
+            // TARIFAS DESDE QUITO
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Quito',1,280)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Quito',2,200)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Quito',3,950)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Quito',4,250)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Quito',5,170)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Quito',6,720)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Quito',7,760)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Quito',8,1350)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Quito',9,2700)");
+            db.execSQL("INSERT INTO tarifas VALUES(null,'Quito',10,1950)");
         }
+
         cursor.close();
         db.close();
     }
@@ -168,6 +203,55 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
         db.close();
         return listaDestinos;
     }
+
+    public ArrayList obtenerDestinosPorOrigen(String origen) {
+
+        ArrayList<Destino> listaDestinos = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+
+                "SELECT d.id_destino, " +
+                        "d.nombre, " +
+                        "d.ubicacion, " +
+                        "t.precio, " +
+                        "d.calificacion, " +
+                        "d.categoria, " +
+                        "d.tipo, " +
+                        "d.icono, " +
+                        "d.color " +
+                        "FROM destinos d " +
+                        "INNER JOIN tarifas t " +
+                        "ON d.id_destino = t.destino_id " +
+                        "WHERE t.origen = ?",
+                new String[]{origen}
+
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                Destino destino = new Destino(
+
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getDouble(3),
+                        cursor.getDouble(4),
+                        cursor.getString(5),
+                        cursor.getString(6),
+                        cursor.getString(7),
+                        cursor.getString(8)
+                );
+                listaDestinos.add(destino);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return listaDestinos;
+
+    }
+
 
     public void agregarFavorito(String usuario, int destinoId) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -255,48 +339,96 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
     }
 
 
-    public long guardarPaquete(String hotel, String comida, String trans, double total) {
+    public long guardarPaquete(String destino, String hotel, String comida, String trans, double total) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
+        values.put("destino", destino);
         values.put("alojamiento", hotel);
         values.put("alimentacion", comida);
         values.put("transporte", trans);
         values.put("precio_total", total);
-
         long id = db.insert("paquetes", null, values);
         db.close();
         return id;
     }
 
-
-    // Buscar usuario por Cédula
-    public Cursor buscarPorCedula(String cedula) {
+    public ArrayList<String[]> obtenerPaquetes() {
+        ArrayList<String[]> lista = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM usuario WHERE cedula=?", new String[]{cedula});
+        Cursor cursor = db.rawQuery("SELECT * FROM paquetes", null);
+        if (cursor.moveToFirst()) {
+            do {
+                String[] paquete = new String[]{
+                        cursor.getString(0), // id
+                        cursor.getString(1), // destino
+                        cursor.getString(2), // alojamiento
+                        cursor.getString(3), // alimentacion
+                        cursor.getString(4), // transporte
+                        cursor.getString(5)  // precio_total
+                };
+                lista.add(paquete);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return lista;
     }
 
-    // Actualizar usuario por Cédula
-    public boolean actualizarPorCedula(String cedula, String nombres, String apellidos, String correo, String edad) {
+    public boolean eliminarPaquete(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        android.content.ContentValues values = new android.content.ContentValues();
-        values.put("nombres", nombres);
-        values.put("apellidos", apellidos);
-        values.put("correo", correo);
-        values.put("edad", edad);
-
-        int filas = db.update("usuario", values, "cedula=?", new String[]{cedula});
+        int filas = db.delete("paquetes", "id_paquete=?", new String[]{String.valueOf(id)});
         db.close();
         return filas > 0;
     }
 
-    // Eliminar usuario por Cédula
-    public boolean eliminarPorCedula(String cedula) {
+
+    public boolean actualizarPaquete(int id, String destino, String alojamiento, String alimentacion, String transporte, double total) {
         SQLiteDatabase db = this.getWritableDatabase();
-        int filas = db.delete("usuario", "cedula=?", new String[]{cedula});
+        ContentValues values = new ContentValues();
+        values.put("destino", destino);
+        values.put("alojamiento", alojamiento);
+        values.put("alimentacion", alimentacion);
+        values.put("transporte", transporte);
+        values.put("precio_total", total);
+        int filas = db.update("paquetes", values, "id_paquete=?", new String[]{String.valueOf(id)});
         db.close();
         return filas > 0;
     }
 
+    public ArrayList<Destino> buscarDestinosPorNombre(String consulta) {
+        ArrayList<Destino> lista = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM destinos WHERE nombre LIKE ?", new String[]{"%" + consulta + "%"});
+
+        if (cursor.moveToFirst()) {
+            do {
+                lista.add(new Destino(
+                        cursor.getInt(0), cursor.getString(1), cursor.getString(2),
+                        cursor.getDouble(3), cursor.getDouble(4), cursor.getString(5),
+                        cursor.getString(6), cursor.getString(7), cursor.getString(8)
+                ));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return lista;
+    }
+
+
+    public boolean actualizarReserva(int idReserva, String nuevaFecha, String nuevoMetodo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("fecha_viaje", nuevaFecha);
+        values.put("metodo_pago", nuevoMetodo);
+
+        int resultado = db.update("reservas", values, "id_reserva = ?", new String[]{String.valueOf(idReserva)});
+        db.close();
+        return resultado > 0;
+    }
+
+    public void eliminarReserva(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("reservas", "id_reserva = ?", new String[]{String.valueOf(id)});
+        db.close();
+    }
 
 }
