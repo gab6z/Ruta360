@@ -213,28 +213,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        if (item.getItemId() == R.id.mp_perfil) {
-            Intent intent = new Intent(this, PerfilActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        if (item.getItemId() == R.id.mp_acercade) {
-            mostrarAcercaDe();
-            return true;
-        }
-        if (item.getItemId() == R.id.mp_ayuda) {
-            mostrarAyuda();
-            return true;
-        }if(item.getItemId() == R.id.mp_historial){
-            mostrarHistorialDialogo();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private void mostrarAcercaDe() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

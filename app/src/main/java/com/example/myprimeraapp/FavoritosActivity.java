@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.widget.TextView;
 
 public class FavoritosActivity extends AppCompatActivity {
 
@@ -39,6 +42,61 @@ public class FavoritosActivity extends AppCompatActivity {
 
                     return insets;
                 });
+        TextView txtIniciales =
+                findViewById(R.id.txtIniciales);
+
+        Intent infoRecibida = getIntent();
+
+        String usuarioCorreo =
+                infoRecibida.getStringExtra("user");
+
+        if (usuarioCorreo == null) {
+
+            SharedPreferences preferences =
+                    getSharedPreferences(
+                            "Credenciales",
+                            MODE_PRIVATE
+                    );
+
+            usuarioCorreo =
+                    preferences.getString(
+                            "userSP",
+                            ""
+                    );
+        }
+
+        BaseDatosSQLite db =
+                new BaseDatosSQLite(this);
+
+        Cursor cursor =
+                db.obtenerUsuario(usuarioCorreo);
+
+        if (cursor.moveToFirst()) {
+
+            String nom =
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow("nombres")
+                    );
+            String ape =
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow("apellidos")
+                    );
+            String iniciales = "";
+
+            if (!nom.isEmpty()) {
+                iniciales += nom.substring(0, 1);
+            }
+
+            if (!ape.isEmpty()) {
+                iniciales += ape.substring(0, 1);
+            }
+
+            txtIniciales.setText(
+                    iniciales.toUpperCase()
+            );
+        }
+
+        cursor.close();
 
         baseDatos = new BaseDatosSQLite(this);
 
