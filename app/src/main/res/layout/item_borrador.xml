@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="3dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- ID y Destino -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:id="@+id/tvIdPaquete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#E8F5E9"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:text="#1"
+                android:textColor="#2E7D32"
+                android:textStyle="bold"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/tvDestinoPaquete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:text="Canadá - Vancouver"
+                android:textColor="#001F3F"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- Detalles -->
+        <TextView
+            android:id="@+id/tvAlojamientoPaquete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🏨 Eco Lodge"
+            android:textColor="#555555"
+            android:textSize="13sp"/>
+
+        <TextView
+            android:id="@+id/tvAlimentacionPaquete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🍴 Básico"
+            android:textColor="#555555"
+            android:textSize="13sp"/>
+
+        <TextView
+            android:id="@+id/tvTransportePaquete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="✈️ Vuelo"
+            android:textColor="#555555"
+            android:textSize="13sp"
+            android:layout_marginBottom="10dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEEEEE"
+            android:layout_marginBottom="10dp"/>
+
+        <!-- Total y botones -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvTotalPaquete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="$0.00"
+                android:textColor="#00838F"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <Button
+                android:id="@+id/btnEditar"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#005A8D"
+                android:text="Editar"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"/>
+
+            <Button
+                android:id="@+id/btnEliminar"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:backgroundTint="#C62828"
+                android:text="Eliminar"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"/>
+
+            <Button
+                android:id="@+id/btnDirectoCarrito"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:backgroundTint="#4CAF50"
+                android:text="Carrito"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

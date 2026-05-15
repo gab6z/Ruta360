@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class BaseDatosSQLite extends SQLiteOpenHelper {
 
     public static final String dbName = "Ruta360.db";
-    public static final int Version = 3;
+    public static final int Version = 4;
 
     public static final String tablaUsuario = "CREATE TABLE usuario (id INTEGER PRIMARY KEY AUTOINCREMENT, cedula TEXT, nombres TEXT,apellidos TEXT,edad INTEGER,nacionalidad TEXT, genero TEXT, estadoCivil TEXT, correo TEXT, contraseña TEXT, fechaNac TEXT, nivelIngles REAL)";
 
@@ -42,6 +42,7 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
 
     public static final String tablaPaquetes = "CREATE TABLE paquetes (" +
             "id_paquete INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "destino TEXT, " +
             "alojamiento TEXT, " +
             "alimentacion TEXT, " +
             "transporte TEXT, " +
@@ -250,18 +251,59 @@ public class BaseDatosSQLite extends SQLiteOpenHelper {
     }
 
 
-    public long guardarPaquete(String hotel, String comida, String trans, double total) {
+    public long guardarPaquete(String destino, String hotel, String comida, String trans, double total) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
+        values.put("destino", destino);
         values.put("alojamiento", hotel);
         values.put("alimentacion", comida);
         values.put("transporte", trans);
         values.put("precio_total", total);
-
         long id = db.insert("paquetes", null, values);
         db.close();
         return id;
+    }
+
+    public ArrayList<String[]> obtenerPaquetes() {
+        ArrayList<String[]> lista = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM paquetes", null);
+        if (cursor.moveToFirst()) {
+            do {
+                String[] paquete = new String[]{
+                        cursor.getString(0), // id
+                        cursor.getString(1), // destino
+                        cursor.getString(2), // alojamiento
+                        cursor.getString(3), // alimentacion
+                        cursor.getString(4), // transporte
+                        cursor.getString(5)  // precio_total
+                };
+                lista.add(paquete);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return lista;
+    }
+
+    public boolean eliminarPaquete(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int filas = db.delete("paquetes", "id_paquete=?", new String[]{String.valueOf(id)});
+        db.close();
+        return filas > 0;
+    }
+
+    public boolean actualizarPaquete(int id, String destino, String alojamiento, String alimentacion, String transporte, double total) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("destino", destino);
+        values.put("alojamiento", alojamiento);
+        values.put("alimentacion", alimentacion);
+        values.put("transporte", transporte);
+        values.put("precio_total", total);
+        int filas = db.update("paquetes", values, "id_paquete=?", new String[]{String.valueOf(id)});
+        db.close();
+        return filas > 0;
     }
 
     public ArrayList<Destino> buscarDestinosPorNombre(String consulta) {
