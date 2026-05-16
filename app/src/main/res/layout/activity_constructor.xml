@@ -629,15 +629,6 @@
                             android:textColor="#FFFFFF" />
 
                         <Button
-                            android:id="@+id/btnVerBorradores"
-                            android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:layout_marginTop="8dp"
-                            android:backgroundTint="#6A1B9A"
-                            android:text="📋 Ver Borradores"
-                            android:textColor="#FFFFFF" />
-
-                        <Button
                             android:id="@+id/btnAgregarCarrito"
                             android:layout_width="match_parent"
                             android:layout_height="55dp"

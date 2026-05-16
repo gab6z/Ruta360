@@ -72,12 +72,6 @@ public class ConstructorActivity extends AppCompatActivity {
             finish();
         });
 
-        Button btnVerBorradores = findViewById(R.id.btnVerBorradores);
-        btnVerBorradores.setOnClickListener(v -> {
-            Intent intentBorradores = new Intent(ConstructorActivity.this, BorradoresActivity.class);
-            startActivity(intentBorradores);
-        });
-
         Intent intent = getIntent();
         String editarId = intent.getStringExtra("editar_id");
         if (editarId != null) {
