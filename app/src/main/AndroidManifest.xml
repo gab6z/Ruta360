@@ -12,11 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyPrimeraApp">
         <activity
-<<<<<<< HEAD
-            android:name=".ConsultarUsuarioActivity"
-=======
             android:name=".BorradoresActivity"
->>>>>>> 48c0ef3b7cda05413205304c0bf9905fbbfed947
             android:exported="false" />
         <activity
             android:name=".ConstructorActivity"

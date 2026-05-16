@@ -99,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
         listaDestacados = db.obtenerDestacados();
         listaMejores = db.obtenerMejoresValorados();
 
-        adapterDestacados = new DestinoAdapter(listaDestacados);
-        adapterMejores = new DestinoAdapter(listaMejores);
+        adapterDestacados = new DestinoAdapter(listaDestacados, usuarioCorreo);
+        adapterMejores = new DestinoAdapter(listaMejores, usuarioCorreo);
 
         recyclerDestacados.setAdapter(adapterDestacados);
         recyclerMejores.setAdapter(adapterMejores);
@@ -175,6 +175,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (id == R.id.mp_acercade) {
                     mostrarAcercaDe();
+                    return true;
+                }
+                if (id == R.id.mp_borradores) {
+                    Intent intent = new Intent(this, BorradoresActivity.class);
+                    startActivity(intent);
                     return true;
                 }
                 if (id == R.id.mp_historial) {

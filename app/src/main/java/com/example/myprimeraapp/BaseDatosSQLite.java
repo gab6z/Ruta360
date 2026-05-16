@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class BaseDatosSQLite extends SQLiteOpenHelper {
 
     public static final String dbName = "Ruta360.db";
-    public static final int Version = 4;
+    public static final int Version = 5;
 
     public static final String tablaUsuario = "CREATE TABLE usuario (id INTEGER PRIMARY KEY AUTOINCREMENT, cedula TEXT, nombres TEXT,apellidos TEXT,edad INTEGER,nacionalidad TEXT, genero TEXT, estadoCivil TEXT, correo TEXT, contraseña TEXT, fechaNac TEXT, nivelIngles REAL)";
 
